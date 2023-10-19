@@ -1,4 +1,5 @@
 import express from "express";
+import router from "../routes/router";
 
 const app = express()
 
@@ -9,6 +10,8 @@ const Porta=3000 || process.env.PORT
 
 app.use(cors())
 app.use(express.json())
+
+app.use(router)
 
 app.listen(Porta,()=>{
     console.log("Servidor inicializado na porta ",  `${Porta}`)
