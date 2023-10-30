@@ -1,33 +1,44 @@
 import { Router } from "express";
+const controller = require('../controllers/user.controller')
+const controller1= require('../controllers/produt.controller')
 //const UserModels = require("UserModels")
 import UserModels from "../models/user.models";
+
+const UserModels=new UserModels()
 
 const router=Router()
 
 
 //users routers
-router.get("/buscar_usuario",(req,res)=>{})
+router.get("/buscar_usuario",controller.todos_usuarios)
 
-router.get("/buscar_usuario_id:levar",(req,res)=>{
-    res.send("Hello")
-})
+router.get("/buscar_usuario",UserModels.todos_usuarios())
 
-router.post("/Enviar_login",(req,res)=>{})
+router.get("/buscar_usuario_id:levar_nome",UserModels.usuario_por_nome())
 
-router.post("/signup",(req,res)=>{})
+router.get("/buscar_usuario_id:email",UserModels.usuarios_por_email())
 
-router.get("/awsredtf",(req,res)=>{})
+router.put("/update_usuario:id",UserModels.actualiza_dados_usuario())
+
+router.post("/signup_novo_usuario",UserModels.inserir_novo_usuario())
+
+router.delete("/delete_usuario",controller.apagar_usuario)
+//router.get("/awsredtf",(req,res)=>{})
 
 
 //produts routes
 
-router.get("/produto",(req,res)=>{})
-router.get("/armazem",(req,res)=>{})
-router.get("produto/:id",(req,res)=>{})
-router.get("produto/:id/:nome",(req,res)=>{})
-router.get("armazem/:id",(req,res)=>{})
+router.get("/produto_armazem",controller1.receber_tudo())
+router.get("/armazem_armazem/:nome",controller1.recebe_tudo_por_nome())
+router.get("/produto_armazem/:id",controller1.receber_tudo_por_id())
+router.get("/produto_armazem/:id/:nome",controller1.receber_tudo_por_id_nome())
+router.get("/somaTempoTotal/",controller1.soma_tempo_total())
+
+router.post("/novo_produto_armazem",controller1.inserir_novo_produto_armazem())
+router.put("/actualiza_produto_armazem/:id",controller1.update_produto_armazem())
+router.delete("/delete_produto_armazem/:id",controller1.apagar_produto_armazem())
 //ou
-const UserModels=new UserModels()
+
 router.get("/",UserModels.getNomeTodosUsuarios())
 
 export default router
