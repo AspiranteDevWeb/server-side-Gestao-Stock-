@@ -31,7 +31,7 @@ exports.recebe_tudo_por_nome=(req,res)=>{
     })
 }
 
-exports.id_nome=(req,result)=>{
+exports.receber_tudo_por_id_nome=(req,result)=>{
 
     let SQL="SELECT * FROM produto INNER JOIN armazem on id=id where id=? and nome=?";
 
