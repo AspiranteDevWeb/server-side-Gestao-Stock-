@@ -1,7 +1,8 @@
 const db=require('../database/conect')
 
 exports.receber_tudo=(req,res)=>{
-    let SQL="SELECT * FROM produto INNER JOIN armazem WHERE id=id";
+    
+    let SQL="SELECT * FROM produto INNER JOIN armazem WHERE armazem.idarmazem= produto.armazerm_id";
 
     db.db.query(SQL,(err,result)=>{
         if(err)console.log(err,"")
@@ -10,32 +11,35 @@ exports.receber_tudo=(req,res)=>{
     })
 }
 
-exports.receber_tudo_por_id=(req,res)=>{
-    
-    let SQL="SELECT * FROM produto INNER JOIN armazem ON id=id WHERE Id=?";
-
-    db.db.query(SQL,[id],(err,result)=>{
-        if(err)console.log(err)
-        else res.status(200).json(result)
-    })
-}
 
 exports.recebe_tudo_por_nome=(req,res)=>{
+    const {produto_nome} =req.params
 
-    let SQL="SELECT * FROM produto INNER JOIN armazem ON id=id WHERE id=?";
+    let SQL="SELECT * FROM produto INNER JOIN armazem ON armazem.idarmazem=produto.armazem_id WHERE produto_nome LIKE?";
 
-    db.db.query(SQL,[nome],(err,result)=>{
+    db.db.query(SQL,[`%${produto_nome}%`],(err,result)=>{
         if(err) console.log(err)
 
         else res.status(200).json(result)
     })
 }
 
-exports.receber_tudo_por_id_nome=(req,result)=>{
+exports.receber_tudo_por_formato=(req,res)=>{
+    const {produto_formato} = req.params
+    let SQL="SELECT * FROM produto INNER JOIN armazem ON armazem.idarmazem=produto.armazem_id WHERE produto_formato like?";
 
-    let SQL="SELECT * FROM produto INNER JOIN armazem on id=id where id=? and nome=?";
+    db.db.query(SQL,[`%${produto_formato}%`],(err,result)=>{
+        if(err)console.log(err)
+        else res.status(200).json(result)
+    })
+}
 
-    db.db.query(SQL,[id,nome],(err,result)=>{
+exports.receber_tudo_por_formato_nome=(req,result)=>{
+    const {produto_nome,produto_formato}=req.params
+
+    let SQL="SELECT * FROM produto INNER JOIN armazem on armazem.idarmazem=produto.armazem_id where produto_nome=  LIKE? and produto_formato LIKE?";
+
+    db.db.query(SQL,[`%${produto_formato,produto_nome}%`],(err,result)=>{
         if(err) console.log(err)
 
         else res.status(200).json(result)
@@ -89,79 +93,124 @@ exports.inserir_novo_produto_armazem=(req,res)=>{
     }
 }
 
+
 exports.update_produto_armazem=(req,res)=>{
     const {armazem_idarmazem, produto_nome, produto_formato, data_emissao, tempo, produto_observacao}=req.body;
 
-    const {sala, gaveta, pratileira, corredor}=req.body;
+    const {idarmazem, sala, gaveta, pratileira, corredor}=req.body;
 
     
-        
-        if (produto_nome != null && produto_nome != undefined){
-            try{
-                let SQL="UPDATE produto SET produto_nome=? Where armazem_idarmazem=?";
-                db.db.query(SQL,[produto_nome,armazem_idarmazem],(err,result)=>{
-                    if(err) console.log(err,"")
-                    else console.log(result,"")
-                })
-            }catch(err){
-                console.log(err)
+        try {
+
+            if (produto_nome != null && produto_nome != undefined){
+                try{
+                    let SQL="UPDATE produto SET produto_nome=? Where armazem_idarmazem=?";
+                    db.db.query(SQL,[produto_nome,armazem_idarmazem],(err,result)=>{
+                        if(err) console.log(err,"")
+                        else console.log(result,"")
+                    })
+                }catch(err){
+                    console.log(err)
+                }
             }
-        }
-        if(produto_formato != null && produto_formato != undefined){
-            try{
-                let SQL=""
-            }catch(err){
-                console.log(err)
+            if(produto_formato != null && produto_formato != undefined){
+                try{
+                    let SQL="UPDATE produto SET produto_formato=? WHERE armazem_idarmazem=?";
+                    db.db.query(SQL,[produto_formato,armazem_idarmazem],(err,result)=>{
+                        if(err)console.log(err)
+                        else console.log(result)
+                    })
+                }catch(err){
+                    console.log(err)
+                }
             }
-        }
-        if(data_emissao != null && data_emissao != undefined){
-            try{
-                let SQL=""
-            }catch(err){
-                console.log(err)
+            if(data_emissao != null && data_emissao != undefined){
+                try{
+                    let SQL="UPDATE produto SET data_emissao=? WHERE armazem_idarmazem=?";
+                    db.db.query(SQL,[data_emissao,armazem_idarmazem],(err,result)=>{
+                        if(err)console.log(err)
+                        else console.log(result)
+                    })
+                }catch(err){
+                    console.log(err)
+                }
             }
-        }
-        if(tempo != null && tempo != undefined){
-            try{
-                let SQL=""
-            }catch(err){
-                console.log(err)
+            if(tempo != null && tempo != undefined){
+                try{
+                    let SQL="UPDATE produto SET tempo=? WHERE armazem_idarmazem=?";
+
+                    db.db.query(SQL,[tempo,armazem_idarmazem],(err,result)=>{
+                        if(err)console.log(err)
+                        else console.log(result)
+                    })
+                }catch(err){
+                    console.log(err)
+                }
             }
-        }
-        if(produto_observacao != null && produto_observacao != undefined){
-            try{
-                let SQL=""
-            }catch(err){
-                console.log(err)
+            if(produto_observacao != null && produto_observacao != undefined){
+                try{
+                    let SQL="UPDATE produto SET produto_observacao=? WHERE armazem_idarmazem=?";
+
+                    db.db.query(SQL,[produto_observacao,armazem_idarmazem],(err,result)=>{
+                        if(err)console.log(err)
+                        else console.log(result)
+                    })
+                }catch(err){
+                    console.log(err)
+                }
             }
-        }
-        if(sala != null && sala !=undefined){
-            try{
-                let SQL=""
-            }catch (err){
-                console.log(err)
+
+
+            if(sala != null && sala !=undefined){
+                try{
+                    let SQL="UPDATE armazem SET sala=? WHERE idarmazem=?";
+
+                    db.db.query(SQL,[sala,idarmazem],(err,result)=>{
+                        if(err) console.log(err)
+                        else console.log(result)
+                    })
+                }catch (err){
+                    console.log(err)
+                }
             }
-        }
-        if(gaveta != null && gaveta !=undefined){
-            try{
-                let SQL=""
-            }catch(err){
-                console.log(err)
+            if(gaveta != null && gaveta !=undefined){
+                try{
+                    let SQL="UPDATE armazem SET gaveta=? WHERE idarmazem=?";
+
+                    db.db.query(SQL,[gaveta,idarmazem],(err,result)=>{
+                        if(err)console.log(err)
+                        else console.log(result)
+                    })
+                }catch(err){
+                    console.log(err)
+                }
+            } 
+            if(pratileira != null && pratileira !=undefined){
+                try{
+                    let SQL ="UPDATE armazem SET pratileira=? WHERE idarmazem=?";
+
+                    db.db.query(SQL,[pratileira,idarmazem],(err,result)=>{
+                        if(err)console.log(err)
+                        else console.log(result)
+                    })
+                }catch(err){
+                    console.log(err)
+                }
             }
-        } 
-        if(pratileira != null && pratileira !=undefined){
-            try{
-                let SQL =""
-            }catch(err){
-                console.log(err)
+            if(corredor != null && corredor !=undefined){
+                try{
+                    let SQL="UPDATE armazem SET corredor=? WHERE idarmazem=?";
+
+                    db.db.query(SQL,[corredor,idarmazem],(err,result)=>{
+                        if(err)console.log(err)
+                        else console.log(result)
+                    })
+                }catch(err){
+                    console.log(err)
+                }
             }
-        }
-        if(corredor != null && corredor !=undefined){
-            try{
-                let SQL="";
-            }catch(err){
-                console.log(err)
-            }
+        }catch(err){
+            console.log(err)
         }
     
 }
@@ -169,7 +218,7 @@ exports.update_produto_armazem=(req,res)=>{
 
 
 exports.apagar_produto_armazem=(req,res)=>{
-    const {id}=req.params;
+    const {armazem_idarmazem, idarmazem}=req.params;
     try{
         let SQL="DELETE FROM produto WHERE armazem_idarmazem=?";
 
