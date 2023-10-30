@@ -30,8 +30,8 @@ router.delete("/delete_usuario",controller.apagar_usuario)
 
 router.get("/produto_armazem",controller1.receber_tudo())
 router.get("/armazem_armazem/:nome",controller1.recebe_tudo_por_nome())
-router.get("/produto_armazem/:id",controller1.receber_tudo_por_id())
-router.get("/produto_armazem/:id/:nome",controller1.receber_tudo_por_id_nome())
+router.get("/produto_armazem/:id",controller1.receber_tudo_por_formato())
+router.get("/produto_armazem/:id/:nome",controller1.receber_tudo_por_formato_nome())
 router.get("/somaTempoTotal/",controller1.soma_tempo_total())
 
 router.post("/novo_produto_armazem",controller1.inserir_novo_produto_armazem())
